@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPM NIWAS SBM Training Registration Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+ --blue:#1565c0;--blue2:#0d47a1;--sky:#eaf4ff;--green:#2e7d32;--orange:#f57c00;--red:#c62828;--purple:#6a1b9a;--ink:#102033;--muted:#607589;--card:#fff;--bg:#eef5fb;--line:#dce7f1;
+}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)} 
+.hero{background:linear-gradient(115deg,#0d47a1,#1976d2 55%,#0b3d91);color:white;padding:28px 30px 38px;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+.hero h1{margin:0 0 8px;font-size:30px;letter-spacing:-.5px}.hero p{margin:0;font-size:15px;opacity:.92}
+.wrap{padding:18px 22px 40px;max-width:1900px;margin:auto}
+.statusbar{display:flex;align-items:center;justify-content:space-between;background:#e8f2ff;border:1px solid #a9d1ff;border-radius:14px;padding:12px 18px;margin-bottom:18px;color:#0b3d75;font-weight:800}
+.spin{width:14px;height:14px;border:3px solid #acd2ff;border-top-color:#1565c0;border-radius:50%;display:inline-block;animation:spin 1s linear infinite;margin-right:10px;vertical-align:-2px}@keyframes spin{to{transform:rotate(360deg)}}
+.kpis{display:grid;grid-template-columns:repeat(7,minmax(130px,1fr));gap:16px;margin-bottom:22px}
+.kpi{background:var(--card);border-radius:20px;min-height:122px;padding:20px 16px;text-align:center;box-shadow:0 8px 22px rgba(29,64,99,.10);border:1px solid var(--line);position:relative;overflow:hidden}
+.kpi:before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--blue),#42a5f5)}.kpi h3{margin:10px 0 6px;color:#41576d;font-size:13px;text-transform:uppercase;letter-spacing:.7px}.kpi .num{font-size:38px;font-weight:900;color:var(--blue);line-height:1}.kpi.green .num{color:var(--green)}.kpi.orange .num{color:var(--orange)}.kpi.red .num{color:var(--red)}.kpi.dark .num{color:#263238}
+.section-title{display:flex;align-items:center;gap:10px;margin:24px 0 14px;font-size:22px;font-weight:900;color:#123f68;text-transform:uppercase;letter-spacing:.4px}.section-title:before{content:"";width:9px;height:30px;border-radius:10px;background:linear-gradient(180deg,#1976d2,#26a69a)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin-bottom:20px}
+.card{background:var(--card);border-radius:18px;padding:18px 20px;box-shadow:0 8px 22px rgba(29,64,99,.10);border:1px solid var(--line);min-height:280px;overflow:hidden}
+.card h2{margin:0 0 14px;font-size:18px;color:#0b3d75;display:flex;align-items:center;gap:8px;border-bottom:1px solid #e4edf5;padding-bottom:12px}
+.card.small{min-height:205px}.span4{grid-column:span 4}.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}canvas{width:100%!important;max-height:330px}.tall canvas{max-height:430px}
+.tablewrap{overflow:auto;max-height:520px;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;background:white}th{position:sticky;top:0;background:#e7f0fb;color:#12304d;text-align:left;font-size:13px;padding:12px;border-bottom:1px solid var(--line);z-index:1}td{font-size:13px;padding:10px 12px;border-bottom:1px solid #edf2f7;vertical-align:top}tr:hover{background:#f8fbff}.pill{display:inline-flex;border-radius:999px;padding:4px 9px;font-weight:800;font-size:12px}.Online{background:#d8eaff;color:#1155cc}.Hybrid{background:#efe1ff;color:#6a1b9a}.Physical{background:#dcf7e4;color:#166534}.Webinar{background:#ffe8cc;color:#b45309}.ok{color:#107a35;font-weight:800}.bad{color:#a24100;font-weight:800}.link{color:#1155cc;font-weight:800;text-decoration:none}
+.filters{display:grid;grid-template-columns:1fr 160px 160px 160px;gap:12px;margin:16px 0}input,select,button{border:1px solid #cfddeb;border-radius:12px;padding:12px 14px;font-size:14px;background:white}button{background:#2b66d9;color:white;font-weight:800;border:none;cursor:pointer}
+.nextTable td:nth-child(n+2),.nextTable th:nth-child(n+2){text-align:right}.nextTable tfoot td{font-weight:900;background:#f1f7ff}
+.genderBox{display:grid;grid-template-columns:1fr 1fr;gap:16px}.genderMini{border-radius:16px;padding:18px;text-align:center;background:#e1f1ff}.genderMini.f{background:#ffe1ed}.genderEmoji{font-size:34px}.genderVal{font-size:38px;font-weight:900;color:#0b3d75}.genderLabel{font-weight:900;color:#5b7185;letter-spacing:.7px}.percent{display:inline-block;background:#1565c0;color:white;border-radius:999px;padding:4px 12px;font-weight:900}.f .percent{background:#c62828}
+.bandGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.bandBox{border:1px solid #dce7f1;border-radius:16px;padding:14px;background:#fbfdff}.bandBox h3{margin:0 0 10px;color:#0b3d75}.bandRow{display:flex;justify-content:space-between;border-bottom:1px dashed #dce7f1;padding:7px 0;font-size:13px}.bandRow b{color:#102033}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.span4,.span6,.span8{grid-column:span 12}.filters{grid-template-columns:1fr}.bandGrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="hero">
+<h1>SPM NIWAS SBM Training Registration Dashboard</h1>
+<p>Live monitoring of SBM-G training registrations from linked public Google Sheets</p>
+</header>
+<div class="wrap">
+<div class="statusbar" id="fetchStatus"><span><span class="spin"></span>Please wait. Fetching registration data from linked Google Sheets...</span><span id="pendingText">Pending: 0</span></div>
+
+<div class="kpis">
+ <div class="kpi"><h3>Total Courses</h3><div class="num" id="kTotalCourses">0</div></div>
+ <div class="kpi green"><h3>No. of courses whose data was fetched</h3><div class="num" id="kFetched">0</div></div>
+ <div class="kpi green"><h3>No. of courses where registration received</h3><div class="num" id="kWithReg">0</div></div>
+ <div class="kpi"><h3>Total Registrations</h3><div class="num" id="kRegs">0</div></div>
+ <div class="kpi orange"><h3>Online</h3><div class="num" id="kOnline">0</div></div>
+ <div class="kpi red"><h3>Hybrid</h3><div class="num" id="kHybrid">0</div></div>
+ <div class="kpi dark"><h3>Physical / Webinar</h3><div class="num" id="kPhysWeb">0</div></div>
+</div>
+
+<div class="section-title">Operational Monitoring</div>
+<div class="grid">
+ <div class="card span6 small"><h2>📅 Courses due in next 4 weeks and registration status</h2><div class="tablewrap" style="max-height:260px"><table class="nextTable" id="next4Table"></table></div></div>
+ <div class="card span6 small"><h2>📊 Registration Band Analysis</h2><div class="bandGrid" id="bandGrid"></div></div>
+</div>
+
+<div class="section-title">Registration Analytics</div>
+<div class="grid">
+ <div class="card span4"><h2>● Registrations by Course Type</h2><canvas id="regTypeChart"></canvas></div>
+ <div class="card span4"><h2>● Course Count by Type</h2><canvas id="courseTypeChart"></canvas></div>
+ <div class="card span4"><h2>● Course Status Overview</h2><canvas id="statusChart"></canvas></div>
+ <div class="card span8 tall"><h2>🏙️ State-wise Registration</h2><canvas id="stateChart"></canvas></div>
+ <div class="card span4"><h2>🏆 Top 5 States Registering Participants</h2><canvas id="topStateChart"></canvas></div>
+ <div class="card span4"><h2>⚥ Gender Distribution</h2><div class="genderBox"><div class="genderMini"><div class="genderEmoji">👨</div><div class="genderVal" id="maleCount">0</div><div class="genderLabel">MALE</div><span class="percent" id="malePct">0%</span></div><div class="genderMini f"><div class="genderEmoji">👩</div><div class="genderVal" id="femaleCount">0</div><div class="genderLabel">FEMALE</div><span class="percent" id="femalePct">0%</span></div></div></div>
+ <div class="card span4"><h2>💼 Top 5 Designations</h2><canvas id="designationChart"></canvas></div>
+ <div class="card span4"><h2>🏢 Top Organisations / Departments</h2><canvas id="deptChart"></canvas></div>
+</div>
+
+<div class="section-title">Course-wise Registration List</div>
+<div class="filters">
+ <input id="q" placeholder="Search course name, code, type...">
+ <select id="typeFilter"><option>All Types</option><option>Online</option><option>Hybrid</option><option>Physical</option><option>Webinar</option></select>
+ <select id="statusFilter"><option>All Status</option><option>Loaded</option><option>No registrations</option><option>No valid link</option><option>Fetch error</option></select>
+ <button onclick="renderAll()">Refresh</button>
+</div>
+<div class="card span12" style="padding:0"><div class="tablewrap"><table id="courseTable"></table></div></div>
+</div>
+
+<script>
+const COURSES = [
+  {
+    "sno": 1,
+    "quarter": "",
+    "start": "16-Apr-2026",
+    "end": "08-May-2026",
+    "duration": "",
+    "code": "SBM-H-01",
+    "batch": "",
+    "course": "Comprehensive Operation and Management of Solid and Liquid Waste Disposal Facilities under SBM-G and Other Programs",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/17398bw19wNEVO-It-eBPBtBXDIob_w7ZQ1JwBBUr7rg/edit?usp=sharing",
+    "sheetId": "17398bw19wNEVO-It-eBPBtBXDIob_w7ZQ1JwBBUr7rg"
+  },
+  {
+    "sno": 2,
+    "quarter": "",
+    "start": "11-May-2026",
+    "end": "11-May-2026",
+    "duration": "",
+    "code": "SBM-OL-01",
+    "batch": "",
+    "course": "Sustaining ODF Plus Village",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1zyvtHQeoNL0GHtbe-KgvQzqnzlbTBEAS8n8pkMvYRGI/edit?usp=sharing",
+    "sheetId": "1zyvtHQeoNL0GHtbe-KgvQzqnzlbTBEAS8n8pkMvYRGI"
+  },
+  {
+    "sno": 3,
+    "quarter": "",
+    "start": "12-May-2026",
+    "end": "12-May-2026",
+    "duration": "",
+    "code": "SBM-OL-02",
+    "batch": "",
+    "course": "Solid Waste Management at GP Level",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1RgGxRHbACF8PbHlHnCQqlIxDzhOMGlRIV5wBBQfwYUg/edit?usp=sharing",
+    "sheetId": "1RgGxRHbACF8PbHlHnCQqlIxDzhOMGlRIV5wBBQfwYUg"
+  },
+  {
+    "sno": 4,
+    "quarter": "",
+    "start": "14-May-2026",
+    "end": "14-May-2026",
+    "duration": "",
+    "code": "SBM-W-01",
+    "batch": "",
+    "course": "Webinar to be Planned",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1LV_KeCVZRRPSd8SAulImQjMW8lb1vZuaBhA4lPdqM-s/edit?usp=sharing",
+    "sheetId": "1LV_KeCVZRRPSd8SAulImQjMW8lb1vZuaBhA4lPdqM-s"
+  },
+  {
+    "sno": 5,
+    "quarter": "",
+    "start": "15-May-2026",
+    "end": "15-May-2026",
+    "duration": "",
+    "code": "SBM-OL-03",
+    "batch": "",
+    "course": "Solid Waste Management Rule 2016",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/141RLIG9gHMjag5wiZrVG_f_6Ny0naWPD8FDQeNO1FZA/edit?usp=sharing",
+    "sheetId": "141RLIG9gHMjag5wiZrVG_f_6Ny0naWPD8FDQeNO1FZA"
+  },
+  {
+    "sno": 6,
+    "quarter": "",
+    "start": "18-May-2026",
+    "end": "22-May-2026",
+    "duration": "",
+    "code": "SPM-P-01",
+    "batch": "",
+    "course": "Training of Master Trainers on imparting training skills using DOPT modules.",
+    "type": "Physical",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1XI6CNF2B10xqjtCVaLaZKpbcFRsm_xqvzEcppHcFYoU/edit?usp=sharing",
+    "sheetId": "1XI6CNF2B10xqjtCVaLaZKpbcFRsm_xqvzEcppHcFYoU"
+  },
+  {
+    "sno": 7,
+    "quarter": "",
+    "start": "01-Jun-2026",
+    "end": "01-Jun-2026",
+    "duration": "",
+    "code": "SBM-OL-04",
+    "batch": "",
+    "course": "Operation and Maintenance of sanitation Assets",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1PBncztXL3P8kgGyLAuhLA6IJKOGgLy9f6wP7qPOyA7Y/edit?usp=sharing",
+    "sheetId": "1PBncztXL3P8kgGyLAuhLA6IJKOGgLy9f6wP7qPOyA7Y"
+  },
+  {
+    "sno": 8,
+    "quarter": "",
+    "start": "03-Jun-2026",
+    "end": "03-Jun-2026",
+    "duration": "",
+    "code": "SBM-OL-05",
+    "batch": "",
+    "course": "IMIS and digital Monitoring Systems",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1_x8qyT15C4hVpAk9mcGBwWWBSa3MDpjcdgJFhLiZIG0/edit?usp=sharing",
+    "sheetId": "1_x8qyT15C4hVpAk9mcGBwWWBSa3MDpjcdgJFhLiZIG0"
+  },
+  {
+    "sno": 9,
+    "quarter": "",
+    "start": "21-May-2026",
+    "end": "12-Jun-2026",
+    "duration": "",
+    "code": "SBM-H-02",
+    "batch": "",
+    "course": "Development and management of rural sanitation infrastructure in challenging, remote hilly areas like Ladhak, Jammu & Kashmir, NE States, etc.",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1E_FWnMNDFrM-Tog1Z6BONG4DfNEYYB_coG3Pl9bgui8/edit?usp=sharing",
+    "sheetId": "1E_FWnMNDFrM-Tog1Z6BONG4DfNEYYB_coG3Pl9bgui8"
+  },
+  {
+    "sno": 10,
+    "quarter": "",
+    "start": "15-Jun-2026",
+    "end": "15-Jun-2026",
+    "duration": "",
+    "code": "SBM-OL-06",
+    "batch": "",
+    "course": "Convergence of SBM-G with VB-G RAM G",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1XAfmAqI1N9EPqEsjncDaAa0RDkkyF28Fq23A5mTrjFc/edit?usp=sharing",
+    "sheetId": "1XAfmAqI1N9EPqEsjncDaAa0RDkkyF28Fq23A5mTrjFc"
+  },
+  {
+    "sno": 11,
+    "quarter": "",
+    "start": "16-Jun-2026",
+    "end": "16-Jun-2026",
+    "duration": "",
+    "code": "SBM-OL-07",
+    "batch": "",
+    "course": "Feacal Sludge Management in Rural Areas",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1EDxF7McCTPayAfS5eX8oaRw3MhZpW7JwZWqz_7Es9PQ/edit?usp=sharing",
+    "sheetId": "1EDxF7McCTPayAfS5eX8oaRw3MhZpW7JwZWqz_7Es9PQ"
+  },
+  {
+    "sno": 12,
+    "quarter": "",
+    "start": "17-Jun-2026",
+    "end": "17-Jun-2026",
+    "duration": "",
+    "code": "SBM-OL-08",
+    "batch": "",
+    "course": "Plastic Waste Management and PWM Rule 2022",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/13wxMU-yY-Gpyq4-zbyWpPjw-VKOrdaWdC45olG3cdcQ/edit?usp=sharing",
+    "sheetId": "13wxMU-yY-Gpyq4-zbyWpPjw-VKOrdaWdC45olG3cdcQ"
+  },
+  {
+    "sno": 13,
+    "quarter": "",
+    "start": "19-Jun-2026",
+    "end": "19-Jun-2026",
+    "duration": "",
+    "code": "SBM-W-02",
+    "batch": "",
+    "course": "Role of Gender Mainstreaming in Sanitation Management for Better Outcomes/ The Role of Gender in Effective Sanitation Management",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1866QV4pweOR2NRQzM1CJFdobFCkAtJ6Sjh2wMur5mxY/edit?usp=sharing",
+    "sheetId": "1866QV4pweOR2NRQzM1CJFdobFCkAtJ6Sjh2wMur5mxY"
+  },
+  {
+    "sno": 14,
+    "quarter": "",
+    "start": "04-Jun-2026",
+    "end": "25-Jun-2026",
+    "duration": "",
+    "code": "SBM-H-03",
+    "batch": "",
+    "course": "Comprehensive Management of Community Sanitary Complexes, IHHL, and Public Sanitation Facilities",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1llYi1MieJZbYOtfcpnDLT_fGFgmxW4ciUpGEyhMiZWU/edit?usp=sharing",
+    "sheetId": "1llYi1MieJZbYOtfcpnDLT_fGFgmxW4ciUpGEyhMiZWU"
+  },
+  {
+    "sno": 15,
+    "quarter": "",
+    "start": "29-Jun-2026",
+    "end": "29-Jun-2026",
+    "duration": "",
+    "code": "SBM-OL-09",
+    "batch": "",
+    "course": "IEC & Social Behaviour Change",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1WWr4JiJU8utVJJSA7yTVxY4oHp9L9seJrS9I6XHA3e8/edit?usp=sharing",
+    "sheetId": "1WWr4JiJU8utVJJSA7yTVxY4oHp9L9seJrS9I6XHA3e8"
+  },
+  {
+    "sno": 16,
+    "quarter": "",
+    "start": "30-Jun-2026",
+    "end": "30-Jun-2026",
+    "duration": "",
+    "code": "SBM-OL-10",
+    "batch": "",
+    "course": "Livelihood Opportunity in Waste Management",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1SBCGcIvyrhCCmw6wSRSYiFVRd_h2Z4cPSzoDRrSS5tY/edit?usp=sharing",
+    "sheetId": "1SBCGcIvyrhCCmw6wSRSYiFVRd_h2Z4cPSzoDRrSS5tY"
+  },
+  {
+    "sno": 17,
+    "quarter": "",
+    "start": "06-Jul-2026",
+    "end": "06-Jul-2026",
+    "duration": "",
+    "code": "SBM-OL-11",
+    "batch": "",
+    "course": "Gobardhan : Technological options and O&M",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1yX-uejjqu4rkLQZW3Mi5Wn1SQJdI7tbW_wVg-UVZZXs/edit?gid=0",
+    "sheetId": "1yX-uejjqu4rkLQZW3Mi5Wn1SQJdI7tbW_wVg-UVZZXs"
+  },
+  {
+    "sno": 18,
+    "quarter": "",
+    "start": "07-Jul-2026",
+    "end": "07-Jul-2026",
+    "duration": "",
+    "code": "SBM-W-03",
+    "batch": "",
+    "course": "Safe Disposal of Thermocol",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/13CVDt8EJ8GB2RBKvfTsMvgeKeooScioG6Paj7P_zixg/edit?usp=sharing",
+    "sheetId": "13CVDt8EJ8GB2RBKvfTsMvgeKeooScioG6Paj7P_zixg"
+  },
+  {
+    "sno": 19,
+    "quarter": "",
+    "start": "08-Jul-2026",
+    "end": "08-Jul-2026",
+    "duration": "",
+    "code": "SBM-OL-12",
+    "batch": "",
+    "course": "Use of Waste Plastic in road Construction And its O&M",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/19EfVEltMOcneRwpkLlauORmB2OM12CTG2J6Zl44hcnI/edit?gid=0",
+    "sheetId": "19EfVEltMOcneRwpkLlauORmB2OM12CTG2J6Zl44hcnI"
+  },
+  {
+    "sno": 20,
+    "quarter": "",
+    "start": "09-Jul-2026",
+    "end": "09-Jul-2026",
+    "duration": "",
+    "code": "SBM-OL-13",
+    "batch": "",
+    "course": "Menstrual Hygiene & Menstrual Waste Management",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/19JJUT72jpv0If5uZp9JUAUrNM-PWAXG7AhcvoKl5ssQ/edit?usp=sharing",
+    "sheetId": "19JJUT72jpv0If5uZp9JUAUrNM-PWAXG7AhcvoKl5ssQ"
+  },
+  {
+    "sno": 21,
+    "quarter": "",
+    "start": "02-Jul-2026",
+    "end": "24-Jul-2026",
+    "duration": "",
+    "code": "SBM-H-05",
+    "batch": "",
+    "course": "IEC, SBCC, COMBI and Community Mobilisation Strategies for Safe Rural Sanitation",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1i6qqNYyqHFIOXCpgWCq2jou5dj7CrOFEvr0q4fLPM-0/edit?usp=sharing",
+    "sheetId": "1i6qqNYyqHFIOXCpgWCq2jou5dj7CrOFEvr0q4fLPM-0"
+  },
+  {
+    "sno": 22,
+    "quarter": "",
+    "start": "27-Jul-2026",
+    "end": "31-Jul-2026",
+    "duration": "",
+    "code": "SPM-P-01",
+    "batch": "",
+    "course": "Training of Master Trainers on imparting training skills using DOPT modules.",
+    "type": "Physical",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1jwhg_EQ099r9R1T1bowajv7NkJD7NmL5J9n7N9W1ZHQ/edit?usp=sharing",
+    "sheetId": "1jwhg_EQ099r9R1T1bowajv7NkJD7NmL5J9n7N9W1ZHQ"
+  },
+  {
+    "sno": 23,
+    "quarter": "",
+    "start": "27-Jul-2026",
+    "end": "27-Jul-2026",
+    "duration": "",
+    "code": "SBM-OL-14",
+    "batch": "",
+    "course": "Training on Use Social Media Campaign for SBM(G)-II",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1Die3-A5ZQxprKPU8De0oyX8iuhAd2VLwTXJgvmEkLa8/edit?usp=sharing",
+    "sheetId": "1Die3-A5ZQxprKPU8De0oyX8iuhAd2VLwTXJgvmEkLa8"
+  },
+  {
+    "sno": 24,
+    "quarter": "",
+    "start": "28-Jul-2026",
+    "end": "28-Jul-2026",
+    "duration": "",
+    "code": "SBM-OL-15",
+    "batch": "",
+    "course": "Orientation program on 15th Finance Commission Grant for the senior elected members and selected government officials.",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1RJYMY28oCGlN-eIl3IiuWXM-zioDBNjsQPqce1f7cJA/edit?gid=0",
+    "sheetId": "1RJYMY28oCGlN-eIl3IiuWXM-zioDBNjsQPqce1f7cJA"
+  },
+  {
+    "sno": 25,
+    "quarter": "",
+    "start": "14-Jul-2026",
+    "end": "07-Aug-2026",
+    "duration": "",
+    "code": "SBM-H-01",
+    "batch": "",
+    "course": "Comprehensive Operation and Management of Solid and Liquid Waste Disposal Facilities under SBM-G and Other Programs",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1f0f-Mg7-h0u8JdXsrXmExgHfJc6vd9odgcJ8DY2dAVI/edit?usp=sharing",
+    "sheetId": "1f0f-Mg7-h0u8JdXsrXmExgHfJc6vd9odgcJ8DY2dAVI"
+  },
+  {
+    "sno": 26,
+    "quarter": "",
+    "start": "10-Aug-2026",
+    "end": "10-Aug-2026",
+    "duration": "",
+    "code": "SBM-OL-16",
+    "batch": "",
+    "course": "Online Training on Retrofitting of Individual Household Latrines (IHHLs) & Community Sanitary Complexes(CSC) and their O&M including strenthening supply of peripherals.",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1DVqdVoaaHuTZXUPox8Od-OXZvHKgCALW-T1vxY0lHtw/edit?gid=0",
+    "sheetId": "1DVqdVoaaHuTZXUPox8Od-OXZvHKgCALW-T1vxY0lHtw"
+  },
+  {
+    "sno": 27,
+    "quarter": "",
+    "start": "11-Aug-2026",
+    "end": "11-Aug-2026",
+    "duration": "",
+    "code": "SBM-W-04",
+    "batch": "",
+    "course": "Impact of Safe Sanitation and Water on Health, Economy, and Gender Equity",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1pRLDN71_-q3giEReIep3BVTCnX7tbJeqWz-bOhYsufw/edit?usp=sharing",
+    "sheetId": "1pRLDN71_-q3giEReIep3BVTCnX7tbJeqWz-bOhYsufw"
+  },
+  {
+    "sno": 28,
+    "quarter": "",
+    "start": "12-Aug-2026",
+    "end": "12-Aug-2026",
+    "duration": "",
+    "code": "SBM-OL-17",
+    "batch": "",
+    "course": "Swachh Vidyalaya Campaign: Promoting WASH in Schools through Awareness and Action",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1Bfgp1F4DfY6GaXbMwePdb1DeUaR8Ads1zMHu7_vrg_E/edit?gid=0",
+    "sheetId": "1Bfgp1F4DfY6GaXbMwePdb1DeUaR8Ads1zMHu7_vrg_E"
+  },
+  {
+    "sno": 29,
+    "quarter": "",
+    "start": "13-Aug-2026",
+    "end": "13-Aug-2026",
+    "duration": "",
+    "code": "SBM-OL-18",
+    "batch": "",
+    "course": "Online Course to be planned",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1J_NWPSBINx3kKzl7vMMYiAgqX4qHVk19q2CSkWBBFw8/edit?gid=0",
+    "sheetId": "1J_NWPSBINx3kKzl7vMMYiAgqX4qHVk19q2CSkWBBFw8"
+  },
+  {
+    "sno": 30,
+    "quarter": "",
+    "start": "14-Aug-2026",
+    "end": "14-Aug-2026",
+    "duration": "",
+    "code": "SBM-OL-19",
+    "batch": "",
+    "course": "Online Course to be planned",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1yqSng8tAxOKtFd-xKFhz8oNR6EhC9TlCVp6UpyLxyFQ/edit?gid=0",
+    "sheetId": "1yqSng8tAxOKtFd-xKFhz8oNR6EhC9TlCVp6UpyLxyFQ"
+  },
+  {
+    "sno": 31,
+    "quarter": "",
+    "start": "30-Jul-2026",
+    "end": "21-Aug-2026",
+    "duration": "",
+    "code": "SBM-H-06",
+    "batch": "",
+    "course": "Course on Digital Governance of Sanitation assets, including Monitoring, SBM-G MIS, and other applications developed by MORD and DWSS, etc.",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1O6UwQ-TaCLZ5Hpy9f3ApYg_6W4zPoGMyzXG8RaWGLaA/edit?usp=sharing",
+    "sheetId": "1O6UwQ-TaCLZ5Hpy9f3ApYg_6W4zPoGMyzXG8RaWGLaA"
+  },
+  {
+    "sno": 32,
+    "quarter": "",
+    "start": "31-Aug-2026",
+    "end": "31-Aug-2026",
+    "duration": "",
+    "code": "SBM-W-05",
+    "batch": "",
+    "course": "Online Training on Safety, Dignity, and Welfare of Sanitation Workers & POSH Compliance",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1ulmot4BaUN7crlr1Lqlt6mu7Bwj7EaFaC8OyxEKvniY/edit?usp=sharing",
+    "sheetId": "1ulmot4BaUN7crlr1Lqlt6mu7Bwj7EaFaC8OyxEKvniY"
+  },
+  {
+    "sno": 33,
+    "quarter": "",
+    "start": "01-Sep-2026",
+    "end": "01-Sep-2026",
+    "duration": "",
+    "code": "SBM-OL-20",
+    "batch": "",
+    "course": "Safety and Dignity of Sanitation Workers and Ragpickers",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1pZXZJwHd6NWOZ8_yG_zTS2wjqJsq_RRwZr7aZxHkhJ8/edit?gid=0",
+    "sheetId": "1pZXZJwHd6NWOZ8_yG_zTS2wjqJsq_RRwZr7aZxHkhJ8"
+  },
+  {
+    "sno": 34,
+    "quarter": "",
+    "start": "02-Sep-2026",
+    "end": "02-Sep-2026",
+    "duration": "",
+    "code": "SBM-OL-21",
+    "batch": "",
+    "course": "Biodegradable Waste Processing through Vermi-Composting and it's challenges .",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1xmwdLqWXE7vQb77fwTbdmeSvn7yS4s4xkjfK6CCIAHU/edit?gid=0",
+    "sheetId": "1xmwdLqWXE7vQb77fwTbdmeSvn7yS4s4xkjfK6CCIAHU"
+  },
+  {
+    "sno": 35,
+    "quarter": "",
+    "start": "20-Aug-2026",
+    "end": "11-Sep-2026",
+    "duration": "",
+    "code": "SBM-H-04",
+    "batch": "",
+    "course": "Detailed course on Planning, Design, Construction, and Management of Greywater Management Systems, incuding Technology Options, O&M, and Sustainability",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1Le-ba4Ke_XrKrSqMG0BI5T4zgxw9KbbROoFMvgpWDCY/edit?usp=sharing",
+    "sheetId": "1Le-ba4Ke_XrKrSqMG0BI5T4zgxw9KbbROoFMvgpWDCY"
+  },
+  {
+    "sno": 36,
+    "quarter": "",
+    "start": "15-Sep-2026",
+    "end": "15-Sep-2026",
+    "duration": "",
+    "code": "SBM-OL-22",
+    "batch": "",
+    "course": "Managing E-Waste Waste",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1TTQUX-uiGOB1bKmpnYDW6fclZeFd1XzZJIQD-vmxMdQ/edit?gid=0",
+    "sheetId": "1TTQUX-uiGOB1bKmpnYDW6fclZeFd1XzZJIQD-vmxMdQ"
+  },
+  {
+    "sno": 37,
+    "quarter": "",
+    "start": "16-Sep-2026",
+    "end": "16-Sep-2026",
+    "duration": "",
+    "code": "SBM-W-06",
+    "batch": "",
+    "course": "Principles and Relevance of ESG (Environmental, Social, and Governance)",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1GUaGNYwxLRjkCCGEFC4CIh1Fps8WC-UIzwiN-InWEmk/edit?usp=sharing",
+    "sheetId": "1GUaGNYwxLRjkCCGEFC4CIh1Fps8WC-UIzwiN-InWEmk"
+  },
+  {
+    "sno": 38,
+    "quarter": "",
+    "start": "17-Sep-2026",
+    "end": "17-Sep-2026",
+    "duration": "",
+    "code": "SBM-OL-23",
+    "batch": "",
+    "course": "Managing Bio-Degradable Wastes",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1l5ZeJ5BDryICaCj7uv4HJWrY-bV1j7EDzX58vR2FZVY/edit?gid=0",
+    "sheetId": "1l5ZeJ5BDryICaCj7uv4HJWrY-bV1j7EDzX58vR2FZVY"
+  },
+  {
+    "sno": 39,
+    "quarter": "",
+    "start": "05-Oct-2026",
+    "end": "09-Oct-2026",
+    "duration": "",
+    "code": "SPM-P-01",
+    "batch": "",
+    "course": "Training of Master Trainers on imparting training skills using DOPT modules.",
+    "type": "Physical",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1WMEwXAJQfg4lF0mHSimsC0KClciUmDsoE5sbtnAeXh8/edit?usp=sharing",
+    "sheetId": "1WMEwXAJQfg4lF0mHSimsC0KClciUmDsoE5sbtnAeXh8"
+  },
+  {
+    "sno": 40,
+    "quarter": "",
+    "start": "30.09.2026",
+    "end": "09.10.2026",
+    "duration": "",
+    "code": "SBM-OS-H-01",
+    "batch": "",
+    "course": "Grey water management: Convergence with VB-G RAM G and other programs",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1Pjlh4HlKlegcnv7LtZqG7C2U7CNAyI1BZzmDio6GIRE/edit?usp=sharing",
+    "sheetId": "1Pjlh4HlKlegcnv7LtZqG7C2U7CNAyI1BZzmDio6GIRE"
+  },
+  {
+    "sno": 41,
+    "quarter": "",
+    "start": "12-Oct-2026",
+    "end": "12-Oct-2026",
+    "duration": "",
+    "code": "SBM-OL-24",
+    "batch": "",
+    "course": "Operations & Maintenance of Bio-gas Plant (GOBARdhan)",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1HhFMEVu90VZRlFSE7IYiqvAYjw5CQ0havUWOVZIyTAU/edit?gid=0",
+    "sheetId": "1HhFMEVu90VZRlFSE7IYiqvAYjw5CQ0havUWOVZIyTAU"
+  },
+  {
+    "sno": 42,
+    "quarter": "",
+    "start": "13-Oct-2026",
+    "end": "13-Oct-2026",
+    "duration": "",
+    "code": "SBM-OL-25",
+    "batch": "",
+    "course": "Strengthening VWSCs",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1BkjPNLtduHfogpEo0quVMbK5CiAsNDWlevBBeiU6hKM/edit?gid=0",
+    "sheetId": "1BkjPNLtduHfogpEo0quVMbK5CiAsNDWlevBBeiU6hKM"
+  },
+  {
+    "sno": 43,
+    "quarter": "",
+    "start": "14-Oct-2026",
+    "end": "14-Oct-2026",
+    "duration": "",
+    "code": "SBM-OL-26",
+    "batch": "",
+    "course": "Report Writing & Documentation",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1V7IEXNFoEB-cWUL1Xf_TRIY-Z6Q7Aj2PqcK3bImlwsI/edit?gid=0",
+    "sheetId": "1V7IEXNFoEB-cWUL1Xf_TRIY-Z6Q7Aj2PqcK3bImlwsI"
+  },
+  {
+    "sno": 44,
+    "quarter": "",
+    "start": "15-Oct-2026",
+    "end": "15-Oct-2026",
+    "duration": "",
+    "code": "SBM-W-07",
+    "batch": "",
+    "course": "Innovativive Case Studies on Grey Water Management.",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1HOfBesJYrNu5B5N8anKSkUKb2rMtuVfLSOQkYlB8Mbg/edit?usp=sharing",
+    "sheetId": "1HOfBesJYrNu5B5N8anKSkUKb2rMtuVfLSOQkYlB8Mbg"
+  },
+  {
+    "sno": 45,
+    "quarter": "",
+    "start": "16-Nov-2026",
+    "end": "16-Nov-2026",
+    "duration": "",
+    "code": "SBM-OL-27",
+    "batch": "",
+    "course": "Development of contents for Social Media",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/12LNnYl2xRjA2hWqQCGBVVdX7gA1tXXfrLk7s8e6PVro/edit?gid=0",
+    "sheetId": "12LNnYl2xRjA2hWqQCGBVVdX7gA1tXXfrLk7s8e6PVro"
+  },
+  {
+    "sno": 46,
+    "quarter": "",
+    "start": "17-Nov-2026",
+    "end": "17-Nov-2026",
+    "duration": "",
+    "code": "SBM-OL-28",
+    "batch": "",
+    "course": "Different PRA Tools.",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1rb2Uqnp6iVqzH6Pxokic0kiOW2ttP7G81ebb2aufBTQ/edit?gid=0",
+    "sheetId": "1rb2Uqnp6iVqzH6Pxokic0kiOW2ttP7G81ebb2aufBTQ"
+  },
+  {
+    "sno": 47,
+    "quarter": "",
+    "start": "18-Nov-2026",
+    "end": "18-Nov-2026",
+    "duration": "",
+    "code": "SBM-W-08",
+    "batch": "",
+    "course": "Circular Economy in Waste Management",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1O4xNqYmWDil8wI4eOHmTPiHYrh2nCEV5d3deru8guIQ/edit?usp=sharing",
+    "sheetId": "1O4xNqYmWDil8wI4eOHmTPiHYrh2nCEV5d3deru8guIQ"
+  },
+  {
+    "sno": 48,
+    "quarter": "",
+    "start": "12-Nov-2026",
+    "end": "04-Dec-2026",
+    "duration": "",
+    "code": "SBM-H-07",
+    "batch": "",
+    "course": "Planning, Construction and Management: Rural Solid Waste Management Infrastructure and Resource Recovery Systems",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1Zutr-xfqza5s1atwcndKTjpn0kjZH1TD7JGUAZXjJVY/edit?usp=sharing",
+    "sheetId": "1Zutr-xfqza5s1atwcndKTjpn0kjZH1TD7JGUAZXjJVY"
+  },
+  {
+    "sno": 49,
+    "quarter": "",
+    "start": "03.12.2026",
+    "end": "11.12.2026",
+    "duration": "",
+    "code": "SBM-OS-H-02",
+    "batch": "",
+    "course": "⁠IEC, SBCC, and community mobilization strategies.",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1N9Z4aOpsIjFxIEOdLQ-w_EDUW9sI62Mlpw7v2Hz_fOk/edit?usp=sharing",
+    "sheetId": "1N9Z4aOpsIjFxIEOdLQ-w_EDUW9sI62Mlpw7v2Hz_fOk"
+  },
+  {
+    "sno": 50,
+    "quarter": "",
+    "start": "07-Dec-2026",
+    "end": "07-Dec-2026",
+    "duration": "",
+    "code": "SBM-OL-29",
+    "batch": "",
+    "course": "Swachhata Green Leaf Rating in Hospitality Facilities",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1QGISrK-XAlq7CP5L_9u2p5hr1Y3wKqzN8kBXj-J7aSw/edit?gid=0",
+    "sheetId": "1QGISrK-XAlq7CP5L_9u2p5hr1Y3wKqzN8kBXj-J7aSw"
+  },
+  {
+    "sno": 51,
+    "quarter": "",
+    "start": "08-Dec-2026",
+    "end": "08-Dec-2026",
+    "duration": "",
+    "code": "SBM-OL-30",
+    "batch": "",
+    "course": "E-Waste- A renewable source of Resources",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1yqOqLXwAmY_JoafzBhsr9mcOF3I3hybEDGLTYW6ZA5A/edit?gid=0",
+    "sheetId": "1yqOqLXwAmY_JoafzBhsr9mcOF3I3hybEDGLTYW6ZA5A"
+  },
+  {
+    "sno": 52,
+    "quarter": "",
+    "start": "09-Dec-2026",
+    "end": "09-Dec-2026",
+    "duration": "",
+    "code": "SBM-W-09",
+    "batch": "",
+    "course": "Carbon Credit Potential in Solid Waste",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1h-lI-S7IWAnOtvPDVXcWtiDkt7_xL2n8higwwOUA4Jg/edit?usp=sharing",
+    "sheetId": "1h-lI-S7IWAnOtvPDVXcWtiDkt7_xL2n8higwwOUA4Jg"
+  },
+  {
+    "sno": 53,
+    "quarter": "",
+    "start": "26-Nov-2026",
+    "end": "18-Dec-2026",
+    "duration": "",
+    "code": "SBM-H-08",
+    "batch": "",
+    "course": "Detailed course on Planning, Design, Construction, and Management of Plastic Waste Management Systems, including Technology Options, O&M, and Sustainability",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1FxRIlHU_y3IF3WFNPXCVjlKHkM1tnr4kT-U7jzhdFMw/edit?usp=sharing",
+    "sheetId": "1FxRIlHU_y3IF3WFNPXCVjlKHkM1tnr4kT-U7jzhdFMw"
+  },
+  {
+    "sno": 54,
+    "quarter": "",
+    "start": "16-Dec-2026",
+    "end": "08-Jan-2027",
+    "duration": "",
+    "code": "SBM-OS-H-03",
+    "batch": "",
+    "course": "Course on Digital Governance of Sanitation assets, including Monitoring, SBM-G MIS, and other applications developed by MORD and DWSS, etc.",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1XDglsMdd0aW_Ayemehj49MMn7MBb_-gvS0-DnZiwKiI/edit?usp=sharing",
+    "sheetId": "1XDglsMdd0aW_Ayemehj49MMn7MBb_-gvS0-DnZiwKiI"
+  },
+  {
+    "sno": 55,
+    "quarter": "",
+    "start": "04-Jan-2027",
+    "end": "04-Jan-2027",
+    "duration": "",
+    "code": "SBM-OL-31",
+    "batch": "",
+    "course": "Convergence with MGNREGA with SBM(G): LWM, Retrofitting of IHHL & CSC",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1KbnlLDcY_M-4O4j5G54r_xlfMzBrUkoWAZDdlCc2mQ4/edit?gid=0",
+    "sheetId": "1KbnlLDcY_M-4O4j5G54r_xlfMzBrUkoWAZDdlCc2mQ4"
+  },
+  {
+    "sno": 56,
+    "quarter": "",
+    "start": "05-Jan-2027",
+    "end": "05-Jan-2027",
+    "duration": "",
+    "code": "SBM-OL-32",
+    "batch": "",
+    "course": "Greywater Management in Rural Areas",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1llGkcyb-48w53yiQq-nW8_AAmcEo7-HYgEAYe7bTifI/edit?gid=0",
+    "sheetId": "1llGkcyb-48w53yiQq-nW8_AAmcEo7-HYgEAYe7bTifI"
+  },
+  {
+    "sno": 57,
+    "quarter": "",
+    "start": "06-Jan-2027",
+    "end": "06-Jan-2027",
+    "duration": "",
+    "code": "SBM-OL-33",
+    "batch": "",
+    "course": "GPDP & LSDG in SBM(G)",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/123938pcEgJgyv-_i9ZViNzJBEeXWhHBRfM0_fmVircY/edit?gid=0",
+    "sheetId": "123938pcEgJgyv-_i9ZViNzJBEeXWhHBRfM0_fmVircY"
+  },
+  {
+    "sno": 58,
+    "quarter": "",
+    "start": "18-Jan-2027",
+    "end": "18-Jan-2027",
+    "duration": "",
+    "code": "SBM-OL-34",
+    "batch": "",
+    "course": "Waste Management from Rural Small-Scale Industries (Jaggery, Oil, and Dairy Units)",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1lW11Wimxfyd06kz_ryliaGB_jnKAg_hkI1J7G-TWGwY/edit?gid=0",
+    "sheetId": "1lW11Wimxfyd06kz_ryliaGB_jnKAg_hkI1J7G-TWGwY"
+  },
+  {
+    "sno": 59,
+    "quarter": "",
+    "start": "19-Jan-2027",
+    "end": "19-Jan-2027",
+    "duration": "",
+    "code": "SBM-OL-35",
+    "batch": "",
+    "course": "Hands on Training on IMIS Dashboard & Documentation",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1mbdC9yInGsoPutIEhdloxQVHhIDZEDaGV7H1o23QoOY/edit?gid=0",
+    "sheetId": "1mbdC9yInGsoPutIEhdloxQVHhIDZEDaGV7H1o23QoOY"
+  },
+  {
+    "sno": 60,
+    "quarter": "",
+    "start": "20-Jan-2027",
+    "end": "20-Jan-2027",
+    "duration": "",
+    "code": "SBM-W-10",
+    "batch": "",
+    "course": "Reflections on Swachh Bharat Mission in India.",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/12qAOu3-Oxl0TzN0U_LKWz9S5QgOI98WIta7Ptf6IQAM/edit?usp=sharing",
+    "sheetId": "12qAOu3-Oxl0TzN0U_LKWz9S5QgOI98WIta7Ptf6IQAM"
+  },
+  {
+    "sno": 61,
+    "quarter": "",
+    "start": "01-Feb-2027",
+    "end": "05-Feb-2027",
+    "duration": "",
+    "code": "SPM-P-01",
+    "batch": "",
+    "course": "Training of Master Trainers on imparting training skills using DOPT modules.",
+    "type": "Physical",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1laKUZ4zn9QX_FWaH4HhlNiTX11fXLQ88a-KnpAmtK3w/edit?usp=sharing",
+    "sheetId": "1laKUZ4zn9QX_FWaH4HhlNiTX11fXLQ88a-KnpAmtK3w"
+  },
+  {
+    "sno": 62,
+    "quarter": "",
+    "start": "01-Feb-2027",
+    "end": "01-Feb-2027",
+    "duration": "",
+    "code": "SBM-OL-36",
+    "batch": "",
+    "course": "Training on Solid Waste Management Rules",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1NlE6luW4A-Jv2DSTy3MqSI7iSrTPK7GIvAfkQHc63pQ/edit?gid=0",
+    "sheetId": "1NlE6luW4A-Jv2DSTy3MqSI7iSrTPK7GIvAfkQHc63pQ"
+  },
+  {
+    "sno": 63,
+    "quarter": "",
+    "start": "02-Feb-2027",
+    "end": "02-Feb-2027",
+    "duration": "",
+    "code": "SBM-OL-37",
+    "batch": "",
+    "course": "Designing Sanitation Assets for Hilly Regions & their O&M",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1zhno90huaxKvEaD2MgbUICHNHUod79-84VVH2797wT0/edit?gid=0",
+    "sheetId": "1zhno90huaxKvEaD2MgbUICHNHUod79-84VVH2797wT0"
+  },
+  {
+    "sno": 64,
+    "quarter": "",
+    "start": "03-Feb-2027",
+    "end": "03-Feb-2027",
+    "duration": "",
+    "code": "SBM-OL-38",
+    "batch": "",
+    "course": "Designing Sanitation Assets for Flood- and Storm-Prone Areas",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1d898tqmTaE8YQWHtf_LHkDEGhOHC3cluD3VdXn4EkeE/edit?gid=0",
+    "sheetId": "1d898tqmTaE8YQWHtf_LHkDEGhOHC3cluD3VdXn4EkeE"
+  },
+  {
+    "sno": 65,
+    "quarter": "",
+    "start": "21-Jan-2027",
+    "end": "12-Feb-2027",
+    "duration": "",
+    "code": "SBM-H-01",
+    "batch": "",
+    "course": "Comprehensive Operation and Management of Solid and Liquid Waste Disposal Facilities under SBM-G and Other Programs",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/16Ji6Lazlvy3q_cW2d_efRgmyticNw0aBRCcRtenDWtk/edit?usp=sharing",
+    "sheetId": "16Ji6Lazlvy3q_cW2d_efRgmyticNw0aBRCcRtenDWtk"
+  },
+  {
+    "sno": 66,
+    "quarter": "",
+    "start": "15-Feb-2027",
+    "end": "15-Feb-2027",
+    "duration": "",
+    "code": "SBM-OL-39",
+    "batch": "",
+    "course": "Climate-Resilient Sanitation Systems",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1jAsHug7F1TdWdsr881pHiXf5WtRzHNDvrP1rfuY7hJs/edit?gid=0",
+    "sheetId": "1jAsHug7F1TdWdsr881pHiXf5WtRzHNDvrP1rfuY7hJs"
+  },
+  {
+    "sno": 67,
+    "quarter": "",
+    "start": "16-Feb-2027",
+    "end": "16-Feb-2027",
+    "duration": "",
+    "code": "SBM-OL-40",
+    "batch": "",
+    "course": "GIS Mapping for Sanitation Planning",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/153eVxNNl9rm5sma62iSsYw2beJjJKlRn4TlGdhtEOsE/edit?gid=0",
+    "sheetId": "153eVxNNl9rm5sma62iSsYw2beJjJKlRn4TlGdhtEOsE"
+  },
+  {
+    "sno": 68,
+    "quarter": "",
+    "start": "17-Feb-2027",
+    "end": "17-Feb-2027",
+    "duration": "",
+    "code": "SBM-W-11",
+    "batch": "",
+    "course": "Biodegradable Alternatives to Plastic Products",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1JC9ngPtJCF-UhwM8UwFmf9h_sO_1DMy8uRbb0UJZFms/edit?usp=sharing",
+    "sheetId": "1JC9ngPtJCF-UhwM8UwFmf9h_sO_1DMy8uRbb0UJZFms"
+  },
+  {
+    "sno": 69,
+    "quarter": "",
+    "start": "04-Feb-2027",
+    "end": "26-Feb-2027",
+    "duration": "",
+    "code": "SBM-H-09",
+    "batch": "",
+    "course": "Planning, designing, constructing, and managing GAS /CBG Plants and Bio-Resource Recovery Systems, including the regulatory framework.",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1_EK0TAkE_nfw7ynQbM4O8xDM7l5j-my5W53rgnU_cE4/edit?usp=sharing",
+    "sheetId": "1_EK0TAkE_nfw7ynQbM4O8xDM7l5j-my5W53rgnU_cE4"
+  },
+  {
+    "sno": 70,
+    "quarter": "",
+    "start": "01-Mar-2027",
+    "end": "01-Mar-2027",
+    "duration": "",
+    "code": "SBM-OL-41",
+    "batch": "",
+    "course": "Different PRA Tools",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1WwHh0QbNBlHu83Cr6kfCHhXrGbpiZwfg9BIdTaq8pAs/edit?gid=0",
+    "sheetId": "1WwHh0QbNBlHu83Cr6kfCHhXrGbpiZwfg9BIdTaq8pAs"
+  },
+  {
+    "sno": 71,
+    "quarter": "",
+    "start": "02-Mar-2027",
+    "end": "02-Mar-2027",
+    "duration": "",
+    "code": "SBM-OL-42",
+    "batch": "",
+    "course": "IEC planing & Monitoring",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1t548MVYxqHgYQTkGgWpsZMrnKAXJnbak2uC6v4jSiSg/edit?gid=0",
+    "sheetId": "1t548MVYxqHgYQTkGgWpsZMrnKAXJnbak2uC6v4jSiSg"
+  },
+  {
+    "sno": 72,
+    "quarter": "",
+    "start": "03-Mar-2027",
+    "end": "03-Mar-2027",
+    "duration": "",
+    "code": "SBM-OL-43",
+    "batch": "",
+    "course": "Sanitation in the Context of Climate Change",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1E6ru0H4KnGsZA_Qa1awPC53XZDl2ISz0HhjfNwEftxo/edit?gid=0",
+    "sheetId": "1E6ru0H4KnGsZA_Qa1awPC53XZDl2ISz0HhjfNwEftxo"
+  },
+  {
+    "sno": 73,
+    "quarter": "",
+    "start": "04-Mar-2027",
+    "end": "04-Mar-2027",
+    "duration": "",
+    "code": "SBM-W-12",
+    "batch": "",
+    "course": "Impact of SBM on Health &Livelihoods",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1Dh0VOucObyKt8sQ9_DAcgcL8-05oLNS4vnNmZKsp_cA/edit?usp=sharing",
+    "sheetId": "1Dh0VOucObyKt8sQ9_DAcgcL8-05oLNS4vnNmZKsp_cA"
+  },
+  {
+    "sno": 74,
+    "quarter": "",
+    "start": "05-Mar-2027",
+    "end": "05-Mar-2027",
+    "duration": "",
+    "code": "SBM-OL-44",
+    "batch": "",
+    "course": "Inclusive & Gender-Sensitive Sanitation",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1f0y9w-jTukCrUlPeVSX33N-RnnnKWQIO_iegiXb4sBU/edit?gid=0",
+    "sheetId": "1f0y9w-jTukCrUlPeVSX33N-RnnnKWQIO_iegiXb4sBU"
+  },
+  {
+    "sno": 75,
+    "quarter": "",
+    "start": "18-Feb-2027",
+    "end": "12-Mar-2027",
+    "duration": "",
+    "code": "SBM-H-10",
+    "batch": "",
+    "course": "Planning, designing, construction and Management of FSSM (Faecal Sludge and Septage Management) & Black Water Infrastructure",
+    "type": "Hybrid",
+    "venue": "SPM NIWAS",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1KCkfyGhvVdEJiEgkvp0NqkPRmzHIYmb8GhOE4YZFl80/edit?usp=sharing",
+    "sheetId": "1KCkfyGhvVdEJiEgkvp0NqkPRmzHIYmb8GhOE4YZFl80"
+  },
+  {
+    "sno": 76,
+    "quarter": "",
+    "start": "15-Mar-2027",
+    "end": "15-Mar-2027",
+    "duration": "",
+    "code": "SBM-OL-45",
+    "batch": "",
+    "course": "Workplace Safety & POSH Training for Sanitation Staff",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1jkYC_sBnRuGJDcVe7gdiFUitgx9EkmReQvWsjZyR7w0/edit?gid=0",
+    "sheetId": "1jkYC_sBnRuGJDcVe7gdiFUitgx9EkmReQvWsjZyR7w0"
+  },
+  {
+    "sno": 77,
+    "quarter": "",
+    "start": "16-Mar-2027",
+    "end": "16-Mar-2027",
+    "duration": "",
+    "code": "SBM-OL-46",
+    "batch": "",
+    "course": "Nature based treatment for grey water Management",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1fnRBzVy15Hj31fRSG_aX_1cdlkSaDPBUL2ZjZQDU-oM/edit?gid=0",
+    "sheetId": "1fnRBzVy15Hj31fRSG_aX_1cdlkSaDPBUL2ZjZQDU-oM"
+  },
+  {
+    "sno": 78,
+    "quarter": "",
+    "start": "17-Mar-2027",
+    "end": "17-Mar-2027",
+    "duration": "",
+    "code": "SBM-OL-47",
+    "batch": "",
+    "course": "WASH Governance & Institutional Frameworks",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1e2EoOZ_E9g3eNzdZ7wzzEtoYjK7ZZu05SYqaRIZ5H4o/edit?gid=0",
+    "sheetId": "1e2EoOZ_E9g3eNzdZ7wzzEtoYjK7ZZu05SYqaRIZ5H4o"
+  },
+  {
+    "sno": 79,
+    "quarter": "",
+    "start": "18-Mar-2027",
+    "end": "18-Mar-2027",
+    "duration": "",
+    "code": "SBM-OL-48",
+    "batch": "",
+    "course": "SBM-G Guidelines: From Policy to Practice",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1CYqUzS2GPLPIr7dJWF2oFOKmLmXT0qTokEUlHQCqYm0/edit?gid=0",
+    "sheetId": "1CYqUzS2GPLPIr7dJWF2oFOKmLmXT0qTokEUlHQCqYm0"
+  },
+  {
+    "sno": 80,
+    "quarter": "",
+    "start": "19-Mar-2027",
+    "end": "19-Mar-2027",
+    "duration": "",
+    "code": "SBM-OL-49",
+    "batch": "",
+    "course": "Inclusive WASH: Equity and Access",
+    "type": "Online",
+    "venue": "SPM NIWAS Digital Academy",
+    "target": "",
+    "link": "https://docs.google.com/spreadsheets/d/1rTuowkb3SeCISn1RRaiKgBpu4UxqcclTGOwDNY0ewQo/edit?gid=0",
+    "sheetId": "1rTuowkb3SeCISn1RRaiKgBpu4UxqcclTGOwDNY0ewQo"
+  }
+];
+const TYPE_COLORS = {Online:'#1e66c1',Hybrid:'#7b2cbf',Physical:'#e85d04',Webinar:'#f9a620'};
+let charts = {};
+let state = {courses: COURSES.map(c=>({...c, registrations:0, rows:[], status:c.sheetId && !c.sheetId.includes('...')?'Pending':'No valid link'}))};
+
+function csvParse(text){
+ const rows=[]; let row=[], cur='', q=false;
+ for(let i=0;i<text.length;i++){ const ch=text[i], nx=text[i+1];
+   if(ch=='"'){ if(q && nx=='"'){cur+='"';i++} else q=!q; }
+   else if(ch==',' && !q){ row.push(cur); cur=''; }
+   else if((ch=='\n'||ch=='\r') && !q){ if(ch=='\r'&&nx=='\n')i++; row.push(cur); if(row.some(x=>x.trim()!=='')) rows.push(row); row=[]; cur=''; }
+   else cur+=ch;
+ }
+ row.push(cur); if(row.some(x=>x.trim()!=='')) rows.push(row);
+ return rows;
+}
+function norm(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');}
+function findHeader(rows){
+ const aliases={
+   name:['name','participant','nameofparticipant','nameoftheparticipant'],
+   gender:['gender','sex'],
+   designation:['designation','designationdistrict','designationanddistrict','desig'],
+   department:['department','departmentdistrictname','departmentanddistrictname','organisation','organization','office'],
+   mobile:['mobile','mobileno','phone','contact','contactno'],
+   state:['state','states'],
+   email:['email','emailid','mail']
+ };
+ for(let i=0;i<Math.min(rows.length,80);i++){
+   let map={}, score=0;
+   rows[i].forEach((h,idx)=>{
+     let n=norm(h);
+     Object.keys(aliases).forEach(k=>{
+       if(aliases[k].some(a=>n.includes(a))){ if(map[k]===undefined){map[k]=idx; score++;} }
+     });
+   });
+   if(map.name!==undefined && (map.state!==undefined || map.gender!==undefined) && score>=3) return {row:i,map};
+   if(map.name!==undefined && score>=4) return {row:i,map};
+ }
+ return null;
+}
+function makeParticipant(row,m){
+ const val=k => (m && m[k]!==undefined ? (row[m[k]]||'').trim() : '');
+ return {name:val('name'), gender:val('gender'), designation:val('designation'), department:val('department'), mobile:val('mobile'), state:val('state'), email:val('email')};
+}
+function isMeaningfulParticipant(p){
+ const name=(p.name||'').trim();
+ if(!name || /^\d+$/.test(name)) return false;
+ const low=name.toLowerCase();
+ if(['name','participant','nameofparticipant','name of the participant'].includes(low)) return false;
+ return ['gender','designation','department','mobile','state','email'].some(k=>(p[k]||'').trim());
+}
+function countRows(rows, h){
+ let out=[];
+ if(h){
+   const m=h.map;
+   for(let r=h.row+1;r<rows.length;r++){
+     const p=makeParticipant(rows[r],m);
+     if(isMeaningfulParticipant(p)) out.push(p);
+   }
+   return {count:out.length,data:out,usedFallback:false};
+ }
+ for(let r=0;r<rows.length;r++){
+   const row=rows[r].map(x=>(x||'').trim());
+   if(!/^\d+$/.test(row[0]||'')) continue;
+   const p={state:row[1]||'', name:row[2]||row[1]||'', gender:row[3]||'', designation:row[4]||'', department:row[5]||'', mobile:row[6]||'', email:row[7]||''};
+   if(isMeaningfulParticipant(p)) out.push(p);
+ }
+ return {count:out.length,data:out,usedFallback:true};
+}
+function getFetchUrls(c){
+ const urls=[]; const id=c.sheetId; if(!id || id.includes('...')) return urls;
+ let gid='0'; const u=c.sheetUrl||''; const m=u.match(/[?&#]gid=(\d+)/); if(m) gid=m[1];
+ urls.push('https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=out:csv&gid='+gid);
+ if(gid!=='0') urls.push('https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=out:csv&gid=0');
+ urls.push('https://docs.google.com/spreadsheets/d/'+id+'/export?format=csv&gid='+gid);
+ if(gid!=='0') urls.push('https://docs.google.com/spreadsheets/d/'+id+'/export?format=csv&gid=0');
+ return [...new Set(urls)];
+}
+async function fetchCourse(c){
+ if(!c.sheetId || c.sheetId.includes('...')){ c.status='No valid link'; c.registrations=0; c.rows=[]; return c; }
+ const urls=getFetchUrls(c); let lastErr='';
+ for(const url of urls){
+   try{
+     const res=await fetch(url, {cache:'no-store'});
+     if(!res.ok) throw new Error('HTTP '+res.status);
+     const text=await res.text();
+     if(!text || text.trim().length<5) throw new Error('Blank CSV');
+     const rows=csvParse(text);
+     const header=findHeader(rows);
+     const counted=countRows(rows,header);
+     c.registrations=counted.count; c.rows=counted.data;
+     if(counted.count>0){ c.status='Loaded'; return c; }
+     if(header){ c.status='No registrations'; return c; }
+     lastErr='Header not found';
+   }catch(e){ lastErr=e.message || String(e); }
+ }
+ c.status=lastErr==='Header not found'?'Header not found':'Fetch error'; c.error=lastErr; c.registrations=0; c.rows=[]; return c;
+}
+async function loadData(){
+ document.getElementById('kTotalCourses').textContent=state.courses.length;
+ let pending=state.courses.filter(c=>c.status==='Pending').length;
+ document.getElementById('pendingText').textContent='Pending: '+pending;
+ const tasks=state.courses.map(async (c)=>{ await fetchCourse(c); pending--; document.getElementById('pendingText').textContent='Pending: '+Math.max(0,pending); renderAll(); });
+ await Promise.allSettled(tasks);
+ document.getElementById('fetchStatus').innerHTML='<span>✅ Registration data fetching completed. Courses without valid/public links are shown separately.</span><span>Pending: 0</span>';
+ renderAll();
+}
+function byType(t){return state.courses.filter(c=>String(c.type).toLowerCase().includes(t.toLowerCase()))}
+function allParticipants(){return state.courses.flatMap(c=>(c.rows||[]).map(r=>({...r, course:c.course, type:c.type, code:c.code})));}
+function countMap(arr, fn){const m={}; arr.forEach(x=>{const k=(fn(x)||'').trim(); if(k) m[k]=(m[k]||0)+1;}); return m;}
+function setKpis(){
+ const fetched=state.courses.filter(c=>['Loaded','No registrations','Header not found'].includes(c.status)).length;
+ const withReg=state.courses.filter(c=>c.registrations>0).length;
+ const regs=state.courses.reduce((a,c)=>a+c.registrations,0);
+ document.getElementById('kFetched').textContent=fetched; document.getElementById('kWithReg').textContent=withReg; document.getElementById('kRegs').textContent=regs;
+ document.getElementById('kOnline').textContent=byType('Online').reduce((a,c)=>a+c.registrations,0);
+ document.getElementById('kHybrid').textContent=byType('Hybrid').reduce((a,c)=>a+c.registrations,0);
+ document.getElementById('kPhysWeb').textContent=byType('Physical').concat(byType('Webinar')).reduce((a,c)=>a+c.registrations,0);
+}
+function chart(id,type,data,options){ if(charts[id]) charts[id].destroy(); charts[id]=new Chart(document.getElementById(id),{type,data,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},...options}});}
+function renderCharts(){
+ const types=['Online','Hybrid','Physical','Webinar'];
+ chart('regTypeChart','doughnut',{labels:types.map(t=>t+' ('+byType(t).reduce((a,c)=>a+c.registrations,0)+')'),datasets:[{data:types.map(t=>byType(t).reduce((a,c)=>a+c.registrations,0)),backgroundColor:types.map(t=>TYPE_COLORS[t])}]});
+ chart('courseTypeChart','doughnut',{labels:types.map(t=>t+' ('+byType(t).length+')'),datasets:[{data:types.map(t=>byType(t).length),backgroundColor:types.map(t=>TYPE_COLORS[t])}]});
+ const today=new Date(); const upcoming=state.courses.filter(c=>parseDate(c.start)>=today).length; const ongoing=state.courses.filter(c=>parseDate(c.start)<=today && parseDate(c.end)>=today).length; const completed=state.courses.length-upcoming-ongoing;
+ chart('statusChart','doughnut',{labels:[`Upcoming (${upcoming})`,`Ongoing (${ongoing})`,`Completed (${completed})`],datasets:[{data:[upcoming,ongoing,completed],backgroundColor:['#f4a62a','#2e7d32','#90a4ae']}]});
+ const p=allParticipants(), sm=countMap(p,x=>cleanState(x.state)), topS=Object.entries(sm).sort((a,b)=>b[1]-a[1]).slice(0,15);
+ chart('stateChart','bar',{labels:topS.map(x=>x[0]),datasets:[{label:'Registrations',data:topS.map(x=>x[1]),backgroundColor:topS.map((_,i)=>['#1e66c1','#228be6','#42a5f5','#85c1ee','#2e7d32','#f57c00'][i%6])}]},{indexAxis:'y',plugins:{legend:{display:false}}});
+ const top5=topS.slice(0,5); chart('topStateChart','bar',{labels:top5.map(x=>x[0]),datasets:[{label:'Registrations',data:top5.map(x=>x[1]),backgroundColor:['#1e66c1','#228be6','#42a5f5','#2e7d32','#f57c00']}]},{plugins:{legend:{display:false}}});
+ const dm=Object.entries(countMap(p,x=>x.designation)).sort((a,b)=>b[1]-a[1]).slice(0,5); chart('designationChart','bar',{labels:dm.map(x=>x[0]),datasets:[{data:dm.map(x=>x[1]),backgroundColor:['#1e66c1','#228be6','#42a5f5','#2e7d32','#f57c00']}]},{indexAxis:'y',plugins:{legend:{display:false}}});
+ const dept=Object.entries(countMap(p,x=>x.department)).sort((a,b)=>b[1]-a[1]).slice(0,8); chart('deptChart','bar',{labels:dept.map(x=>x[0]),datasets:[{data:dept.map(x=>x[1]),backgroundColor:['#1e66c1','#228be6','#42a5f5','#2e7d32','#f57c00','#7b2cbf','#c62828','#78909c']}]},{indexAxis:'y',plugins:{legend:{display:false}}});
+ const male=p.filter(x=>/^m/i.test(x.gender)).length, female=p.filter(x=>/^f/i.test(x.gender)).length, tot=male+female;
+ maleCount.textContent=male; femaleCount.textContent=female; malePct.textContent=tot?Math.round(male*100/tot)+'%':'0%'; femalePct.textContent=tot?Math.round(female*100/tot)+'%':'0%';
+}
+function cleanState(s){s=String(s||'').trim(); if(!s) return ''; const u=s.toUpperCase(); if(u==='J&K'||u.includes('JAMMU')) return 'Jammu & Kashmir'; if(u.includes('ODISHA')) return 'Odisha'; if(u.includes('WEST BENGAL')) return 'West Bengal'; if(u.includes('CHHAT')) return 'Chhattisgarh'; return s.replace(/\w\S*/g,t=>t[0].toUpperCase()+t.slice(1).toLowerCase());}
+function parseDate(s){let d=new Date(s); if(isNaN(d)){let m=String(s).match(/(\d{1,2})-([A-Za-z]{3})-(\d{4})/); if(m) d=new Date(`${m[1]} ${m[2]} ${m[3]}`);} return isNaN(d)?new Date('2999-01-01'):d;}
+function renderNext4(){
+ const now=new Date(), lim=new Date(now.getTime()+28*864e5);
+ const due=state.courses.filter(c=>{const d=parseDate(c.start);return d>=now&&d<=lim;}).sort((a,b)=>parseDate(a.start)-parseDate(b.start));
+ let totals={Hybrid:0,Physical:0,Online:0,Webinar:0,Total:0};
+ due.forEach(c=>{let t=['Hybrid','Physical','Online','Webinar'].find(x=>String(c.type).includes(x))||'Online'; totals[t]+=c.registrations; totals.Total+=c.registrations;});
+ next4Table.innerHTML='<thead><tr><th>Name of Course</th><th>No.</th><th>Registrations</th><th>Hybrid</th><th>Physical</th><th>Online</th><th>Webinar</th><th>Total</th></tr></thead><tbody>'+
+ (due.length?due.map((c,i)=>`<tr><td>${esc(c.course)}<br><span style="color:#607589">${c.code} | ${c.start}</span></td><td>${i+1}</td><td>${c.registrations}</td><td>${String(c.type).includes('Hybrid')?c.registrations:0}</td><td>${String(c.type).includes('Physical')?c.registrations:0}</td><td>${String(c.type).includes('Online')?c.registrations:0}</td><td>${String(c.type).includes('Webinar')?c.registrations:0}</td><td>${c.registrations}</td></tr>`).join(''):'<tr><td colspan="8">No courses due in the next 4 weeks.</td></tr>')+
+ `</tbody><tfoot><tr><td colspan="3">Total</td><td>${totals.Hybrid}</td><td>${totals.Physical}</td><td>${totals.Online}</td><td>${totals.Webinar}</td><td>${totals.Total}</td></tr></tfoot>`;
+}
+function renderBands(){
+ const bands=[['Zero',c=>c.registrations===0],['< 10',c=>c.registrations>0&&c.registrations<10],['10–14',c=>c.registrations>=10&&c.registrations<=14],['15–19',c=>c.registrations>=15&&c.registrations<=19],['20–24',c=>c.registrations>=20&&c.registrations<=24],['25–30',c=>c.registrations>=25&&c.registrations<=30],['> 30',c=>c.registrations>30]];
+ const groups=['Online','Hybrid','Physical','All Courses'];
+ bandGrid.innerHTML=groups.map(g=>{const arr=g==='All Courses'?state.courses:byType(g);return `<div class="bandBox"><h3>${g} (${arr.length})</h3>`+bands.map(b=>`<div class="bandRow"><span>${b[0]} registrations</span><b>${arr.filter(b[1]).length}</b></div>`).join('')+'</div>';}).join('');
+}
+function renderTable(){
+ const q=document.getElementById('q').value.toLowerCase(), tf=typeFilter.value, sf=statusFilter.value;
+ let rows=state.courses.filter(c=>(tf==='All Types'||String(c.type).includes(tf))&&(sf==='All Status'||c.status===sf)&&[c.course,c.code,c.type,c.status].join(' ').toLowerCase().includes(q));
+ courseTable.innerHTML='<thead><tr><th>S.No.</th><th>Course</th><th>Type</th><th>Code</th><th>Date</th><th>Registrations</th><th>Status</th><th>Sheet</th></tr></thead><tbody>'+
+ rows.map((c,i)=>`<tr><td>${i+1}</td><td><b>${esc(c.course)}</b><br><span style="color:#607589">${esc(c.venue||'')}</span></td><td><span class="pill ${typeClass(c.type)}">${esc(c.type)}</span></td><td>${esc(c.code)}</td><td>${esc(c.start)} to ${esc(c.end)}</td><td><b>${c.registrations}</b></td><td class="${c.status==='Loaded'?'ok':'bad'}">${esc(c.status)}</td><td>${c.link?`<a class="link" href="${c.link}" target="_blank">Open</a>`:''}</td></tr>`).join('')+'</tbody>';
+}
+function typeClass(t){return ['Online','Hybrid','Physical','Webinar'].find(x=>String(t).includes(x))||'Online';}
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function renderAll(){setKpis(); renderNext4(); renderBands(); renderCharts(); renderTable();}
+['q','typeFilter','statusFilter'].forEach(id=>document.getElementById(id).addEventListener('input',renderTable));
+renderAll(); loadData();
+</script>
+</body>
+</html>
